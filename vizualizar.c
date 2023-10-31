@@ -1,12 +1,13 @@
-#include <stdio.h>
+#include "header.h"
 
 int main(){
-    FILE *file = fopen("logs.txt", "w");
-    if(file == NULL){
-        printf("Algo deu errado!");
-    }else{
-        printf("Qualquer coisa");
+    while (1)
+    {
+        system("cls");
+        
+        displayQueue();
+
+        Sleep(5000);
     }
-    while (1){};
-    fclose(file);
+    
 }
