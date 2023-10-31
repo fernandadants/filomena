@@ -28,7 +28,7 @@ int adicionar_log(Pessoa p){
 }
 
 int carregar_arquivo(){
-  FILE *file = fopen("fila.txt", "w");
+  FILE *file = fopen("./data/fila.txt", "w");
   if (file == NULL){
     printf("Error: Carregamento de 'file.txt'");
     return -1;
@@ -78,6 +78,45 @@ Pessoa dequeue() {
     carregar_arquivo();
 }
 
+void editar(char *arqnome, char *linhaAntiga, char *linhaNova)
+{
+    char line[80];
+    FILE *arq;
+    FILE *temp;
+
+    arq = fopen(arqnome, "w");
+    if (arq == NULL)
+    {
+        printf("Falha ao editar arquivo");
+        return;
+    }
+
+    temp = fopen("temp.txt", "w");
+    if(temp == NULL)
+    {
+        printf("Falha ao abrir temp");
+        fclose(arq)
+        return;
+    }
+
+    while(fgets(line, sizeof(line), arq))
+    {
+        if(strstr(line, linhaAntiga) != NULL)
+        {
+            fputs(linhaNova, temp);
+        }
+        else
+        {
+            fputs(linhaAntiga, temp);
+        }
+    }
+
+    fclose(arq);
+    fclose(temp);
+    remove(arqnome);
+    rename("temp.txt", arqnome);
+}
+
 int displayQueue(){
   FILE *file = fopen("./data/fila.txt", "r");
   if (file == NULL){
@@ -85,7 +124,6 @@ int displayQueue(){
     return -1;
   }
 
-  char linha [100];
 
   printf("\n----------- FILA -----------\n");
   
