@@ -8,7 +8,6 @@ typedef struct{
   int tempo; //tempo em minutos
 } Pessoa;
 
-int maxPessoas = 10; // Número máximo de pessoas a serem armazenadas
 Pessoa pessoas[MAX_PESSOAS]; // Array de structs Pessoa
 int numPessoas = 0; // Contador de pessoas armazenadas
 
@@ -16,13 +15,41 @@ int primeiro_i = 0; // Índice do primeiro elemento na fila
 int ultimo_i = 0; // Índice do último elemento na fila
 int cont = 0;
 
+int adicionar_log(Pessoa p){
+  FILE *file = fopen("./data/logs.txt", "w");
+  if(file == NULL){
+    printf("Error: Carregamento de 'file.txt'")
+    return -1;
+  }
+  fseek(file, 0, SEEK_END);
+  fprintf("%s, %d", p.nome, p.tempo);
+  fclose(file);
+  return 0;
+}
+
+int carregar_arquivo(){
+  FILE *file = fopen("fila.txt", "w");
+  if (file == NULL){
+    printf("Error: Carregamento de 'file.txt'")
+    return -1;
+  }
+
+  for(int i = 0; i<numPessoas; i++){
+    fprintf("%s, %d", pessoas[i].nome, pessoas[i].tempo)
+  }
+  return 0;
+
+  fclose(file);
+}
+
 //Adiciona a pessoa no fim da lista
 void enqueue(Pessoa p) {
-  if (numPessoas < maxPessoas) {
+  if (numPessoas < MAX_PESSOAS) {
     pessoas[ultimo_i] = p;
-    ultimo_i = (ultimo_i + 1) % maxPessoas; // Circular, para reutilizar espaço
+    ultimo_i = (ultimo_i + 1) % MAX_PESSOAS; // Circular, para reutilizar espaço
     numPessoas++;
   }
+  carregar_arquivo();
 }
 
 //Retorna a pessoa mais antiga da lista
@@ -31,12 +58,14 @@ Pessoa dequeue() {
         Pessoa p = pessoas[primeiro_i];
         // Mover todos os outros elementos para frente
         for (int i = 0; i < numPessoas - 1; i++) {
-            int atual = (primeiro_i + i) % maxPessoas;
-            int proximo = (primeiro_i + i + 1) % maxPessoas;
+            int atual = (primeiro_i + i) % MAX_PESSOAS;
+            int proximo = (primeiro_i + i + 1) % MAX_PESSOAS;
             pessoas[atual] = pessoas[proximo];
         }
         // Decrementar o número de pessoas na fila
         numPessoas--;
+
+        adicionar_log(p);
         // Retornar a pessoa removida
         return p;
     }
@@ -45,6 +74,8 @@ Pessoa dequeue() {
     strcpy(vazia.nome, "");
     vazia.tempo = 0;
     return vazia;
+
+    carregar_arquivo();
 }
 
 int displayQueue(){
@@ -58,11 +89,12 @@ int displayQueue(){
 
   printf("\n----------- FILA -----------\n");
   
-  while(fgets(linha, 100, file) != NULL){
-    printf("%s\n", linha);
+  while(fscanf(file, "%[^,], %d\n", pessoas[cont].nome, &pessoas[cont].tempo) == 2){
+    printf("%-20s | 0%d:00\n", pessoas[cont].nome, pessoas[cont].tempo);
+    printf("---------------------+------\n");
+    cont ++;
   }
 
-  printf("-----------------------------");
   fclose(file);
 
   return 0; 
