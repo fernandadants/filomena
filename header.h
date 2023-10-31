@@ -67,3 +67,30 @@ int displayQueue(){
 
   return 0; 
 }
+
+int counter(char name[], int tam, int time) {
+
+  // tam o numero de vezes que vai ser rodado o contador
+  // time o tempo que deseja rodar no contador (minutos)
+  // name o nome do usuario
+
+  int contador = 0;
+
+  for (size_t i = 0; i < tam; i++) {
+    
+    time = 5;
+    //time = time*60;
+
+    while (contador != time) {
+      contador++;
+      printf("%d\n", contador);
+      Sleep(1);
+
+      if (contador + 1 == time) {
+        printf("Time's up %s!\n", name);
+        return 1;
+        //  maneira de indicar que o tempo do contador do microondas acabou
+      }
+    }
+  }
+}
