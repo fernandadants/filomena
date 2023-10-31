@@ -18,11 +18,11 @@ int cont = 0;
 int adicionar_log(Pessoa p){
   FILE *file = fopen("./data/logs.txt", "w");
   if(file == NULL){
-    printf("Error: Carregamento de 'file.txt'")
+    printf("Error: Carregamento de 'file.txt'");
     return -1;
   }
   fseek(file, 0, SEEK_END);
-  fprintf("%s, %d", p.nome, p.tempo);
+  fprintf(file, "%s, %d", p.nome, p.tempo);
   fclose(file);
   return 0;
 }
@@ -30,12 +30,12 @@ int adicionar_log(Pessoa p){
 int carregar_arquivo(){
   FILE *file = fopen("fila.txt", "w");
   if (file == NULL){
-    printf("Error: Carregamento de 'file.txt'")
+    printf("Error: Carregamento de 'file.txt'");
     return -1;
   }
 
   for(int i = 0; i<numPessoas; i++){
-    fprintf("%s, %d", pessoas[i].nome, pessoas[i].tempo)
+    fprintf(file, "%s, %d", pessoas[i].nome, pessoas[i].tempo);
   }
   return 0;
 
