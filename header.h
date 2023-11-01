@@ -13,10 +13,9 @@ typedef struct {
 Pessoa pessoas[MAX_PESSOAS]; // Array de structs Pessoa
 int numPessoas = 0;          // Contador de pessoas armazenadas
 
-int primeiro_i = 0; // Índice do primeiro elemento na fila
-int ultimo_i = 0;   // Índice do último elemento na fila
 int cont = 0;
-//---
+
+// Função para zerar as informações cadastradas na fila e enviar relátorio para o log
 void zera() {
 
   FILE *arq2 = fopen("logs.txt", "a");
@@ -30,6 +29,8 @@ void zera() {
   fclose(arq2);
   fclose(arq1);
 }
+
+// Função para apagar usuário da lista
 void apaga_log(int linha) {
 
   FILE *arq1 = fopen("fila.txt", "r+");
@@ -60,6 +61,7 @@ void apaga_log(int linha) {
   rename("transferindo.txt", "fila.txt");
 }
 
+// Função para adicionar pessoa na lista
 int adicionar_log(Pessoa p) {
 
   FILE *arq1 = fopen("logs.txt", "a");
@@ -80,54 +82,7 @@ int adicionar_log(Pessoa p) {
   return 0;
 }
 
-int carregar_arquivo() {
-  FILE *file = fopen("fila.txt", "w");
-  if (file == NULL) {
-    printf("Error: Carregamento de 'file.txt'");
-    return -1;
-  }
-
-  for (int i = 0; i < numPessoas; i++) {
-    fprintf(file, "%s, %d\n", pessoas[i].nome, pessoas[i].tempo);
-  }
-  return 0;
-
-  fclose(file);
-}
-
-// Adiciona a pessoa no fim da lista
-void enqueue(Pessoa p) {
-  if (numPessoas < MAX_PESSOAS) {
-    pessoas[ultimo_i] = p;
-    ultimo_i = (ultimo_i + 1) % MAX_PESSOAS; // Circular, para reutilizar espaço
-    numPessoas++;
-  }
-}
-
-// Retorna a pessoa mais antiga da lista
-Pessoa dequeue() {
-  if (numPessoas > 0) {
-    Pessoa p = pessoas[primeiro_i];
-    // Mover todos os outros elementos para frente
-    for (int i = 0; i < numPessoas - 1; i++) {
-      int atual = (primeiro_i + i) % MAX_PESSOAS;
-      int proximo = (primeiro_i + i + 1) % MAX_PESSOAS;
-      pessoas[atual] = pessoas[proximo];
-    }
-    // Decrementar o número de pessoas na fila
-    numPessoas--;
-
-    adicionar_log(p);
-    // Retornar a pessoa removida
-    return p;
-  }
-  // Retorne uma pessoa vazia se a fila estiver vazia
-  Pessoa vazia;
-  strcpy(vazia.nome, "");
-  vazia.tempo = 0;
-  return vazia;
-}
-
+// Função para editar usuário da lista
 void editar_log() {
 
   int linha;
@@ -172,27 +127,7 @@ void editar_log() {
   rename("transferindo.txt", "fila.txt");
 }
 
-int displayQueue() {
-  FILE *file = fopen("./data/fila.txt", "r");
-  if (file == NULL) {
-    printf("Erro: fila.txt");
-    return -1;
-  }
-
-  printf("\n----------- FILA -----------\n");
-
-  while (fscanf(file, "%[^,], %d\n", pessoas[cont].nome,
-                &pessoas[cont].tempo) == 2) {
-    printf("%-20s | 0%d:00\n", pessoas[cont].nome, pessoas[cont].tempo);
-    printf("---------------------+------\n");
-    cont++;
-  }
-
-  fclose(file);
-
-  return 0;
-}
-
+// Função para contar tempo da primeira pessoa da lista
 void counter() {
 
   FILE *arq1 = fopen("fila.txt", "r");
