@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <windows.h>
 #include <string.h>
+
+#define LEN 1001
 #define MAX_PESSOAS 10
 
 typedef struct{
