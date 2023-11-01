@@ -15,6 +15,37 @@ int primeiro_i = 0; // Índice do primeiro elemento na fila
 int ultimo_i = 0; // Índice do último elemento na fila
 int cont = 0;
 
+void apaga_log(){
+  
+  int linha;
+  FILE *arq1 = fopen("logs.txt", "r+");
+  FILE *output = fopen("transferindo.txt", "w");
+
+  printf("Digite o numero do usuario a ser removido: ");
+  scanf("%d", &linha);
+
+  fseek(arq1, 0, SEEK_SET);
+  int linha_atual = 1;
+  char texto[LEN] = "";
+  char texto_[LEN] = "";
+
+  for(int j = 0; !feof(arq1);j++){
+    memset(texto, '\0', LEN);
+    fgets(texto, LEN, arq1);
+    if(linha_atual == linha){
+      fputs(texto_, output);
+      linha_atual++;
+      continue;
+    }
+    linha_atual = linha_atual + 1; 
+    fputs(texto, output);
+  }
+  fclose(arq1);
+  fclose(output);
+  remove("logs.txt");
+  rename("transferindo.txt", "logs.txt");
+}
+
 int adicionar_log(Pessoa p){
   FILE *file = fopen("./data/logs.txt", "w");
   if(file == NULL){
