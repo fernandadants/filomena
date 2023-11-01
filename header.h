@@ -18,7 +18,7 @@ int cont = 0;
 void apaga_log(){
   
   int linha;
-  FILE *arq1 = fopen("logs.txt", "r+");
+  FILE *arq1 = fopen("./data/logs.txt", "r");
   FILE *output = fopen("transferindo.txt", "w");
 
   printf("Digite o numero do usuario a ser removido: ");
